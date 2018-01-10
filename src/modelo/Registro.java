@@ -280,11 +280,23 @@ public class Registro {
         }
     }
     
-    public boolean agregarcategoria(int categoria, String descripcion){
+    public boolean agregarcategoria(String descripcion){
         
+        int registros = 0;
+     
+        try{
+           PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT count(*) as total FROM taller3.categoria;"); 
+           ResultSet res = pstm.executeQuery();
+           res.next();
+           registros = res.getInt("total");
+           res.close();
+        }catch(SQLException e){
+           System.err.println( e.getMessage() );
+        }
+        registros = registros + 1;
         //Se arma la consulta
         String q=" INSERT INTO taller3.categoria(id, descripcion) "
-                + "VALUES ( '" + categoria + "','"+ descripcion +"');"; //
+                + "VALUES ( '" + registros + "','"+ descripcion +"');"; //
         //se ejecuta la consulta
         try {
             PreparedStatement pstm = conectara.conectar().prepareStatement(q);
@@ -298,10 +310,10 @@ public class Registro {
         
     }
     
-    public void sConsulta4(){
-     DefaultTableModel tablemodel = new DefaultTableModel();
+    public void buscartexto(){
+     //DefaultTableModel tablemodel = new DefaultTableModel();
      int registros = 0;
-     String[] columNames = {"Código","Nombre","Categoría","Precio","Calidad 4k"};
+     //String[] columNames = {"Código","Nombre","Categoría","Precio","Calidad 4k"};
      try{
         PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT count(*) as total FROM taller3.pelicula WHERE id_categoria = 7;"); //7 = romance
         ResultSet res = pstm.executeQuery();
@@ -325,7 +337,7 @@ public class Registro {
            i++;
         }
         res.close();
-        tablemodel.setDataVector(data, columNames );
+        //tablemodel.setDataVector(data, columNames );
         }catch(SQLException e){
            System.err.println( e.getMessage() );
        }
