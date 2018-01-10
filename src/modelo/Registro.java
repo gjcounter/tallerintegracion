@@ -310,10 +310,12 @@ public class Registro {
         
     }
     
-    public void buscartexto(){
+    public int[] buscarpeliculastexto(String texto){
      //DefaultTableModel tablemodel = new DefaultTableModel();
      int registros = 0;
+     int[] codigos = new int[registros];
      //String[] columNames = {"Código","Nombre","Categoría","Precio","Calidad 4k"};
+     /*
      try{
         PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT count(*) as total FROM taller3.pelicula WHERE id_categoria = 7;"); //7 = romance
         ResultSet res = pstm.executeQuery();
@@ -322,10 +324,10 @@ public class Registro {
         res.close();
      }catch(SQLException e){
         System.err.println( e.getMessage() );
-     }
+     }*/
      Object[][] data = new String[registros][9];
      try{
-        PreparedStatement pstm = conectara.conectar().prepareStatement("SELECT * FROM taller3.pelicula WHERE id_categoria = 7;");//7 = romance
+        PreparedStatement pstm = conectara.conectar().prepareStatement("SELECT * FROM taller3.pelicula WHERE nombre LIKE '%"+ texto +"%';");
         ResultSet res = pstm.executeQuery();
         int i=0;
         while(res.next()){
@@ -338,9 +340,15 @@ public class Registro {
         }
         res.close();
         //tablemodel.setDataVector(data, columNames );
+        
+        int e = 0;
+        while (e<registros){
+            codigos[e]=(Integer)data[e][0];
+            e++;
+        }
         }catch(SQLException e){
            System.err.println( e.getMessage() );
        }
-       //return tablemodel;
+       return codigos;
    }
 }
