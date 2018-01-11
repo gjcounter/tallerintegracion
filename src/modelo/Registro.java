@@ -313,29 +313,26 @@ public class Registro {
     public int[] buscarpeliculastexto(String texto){
      //DefaultTableModel tablemodel = new DefaultTableModel();
      int registros = 0;
-     int[] codigos = new int[registros];
+     int[] codigos = new int[0];
      //String[] columNames = {"Código","Nombre","Categoría","Precio","Calidad 4k"};
-     /*
+     
      try{
         PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT count(*) as total FROM taller3.pelicula WHERE id_categoria = 7;"); //7 = romance
         ResultSet res = pstm.executeQuery();
         res.next();
         registros = res.getInt("total");
+        codigos = new int[registros];
         res.close();
      }catch(SQLException e){
         System.err.println( e.getMessage() );
-     }*/
-     Object[][] data = new String[registros][9];
+     }
+     int[] data = new int[registros];
      try{
         PreparedStatement pstm = conectara.conectar().prepareStatement("SELECT * FROM taller3.pelicula WHERE nombre LIKE '%"+ texto +"%';");
         ResultSet res = pstm.executeQuery();
         int i=0;
         while(res.next()){
-               data[i][0] = res.getString( "codigo" );
-               data[i][1] = res.getString( "nombre" );
-               data[i][2] = nombre_categoria (Integer.parseInt(res.getString( "id_categoria" )));
-               data[i][3] = res.getString( "precio" );
-               data[i][4] = res.getString( "formato4k" );
+               data[i]= res.getInt("codigo" );
            i++;
         }
         res.close();
@@ -343,7 +340,7 @@ public class Registro {
         
         int e = 0;
         while (e<registros){
-            codigos[e]=(Integer)data[e][0];
+            codigos[e]= data[e];
             e++;
         }
         }catch(SQLException e){
