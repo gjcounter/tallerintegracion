@@ -348,4 +348,87 @@ public class Registro {
        }
        return codigos;
    }
+    
+    public int[] buscarpeliculacategoria(String descripcion){
+        int idcategoria =0;
+     try{
+        PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT id FROM taller3.categoria WHERE descripcion = "+descripcion+";"); 
+        ResultSet res = pstm.executeQuery();
+        res.next();
+        idcategoria = res.getInt("id");
+        res.close();
+     }catch(SQLException e){
+        System.err.println( e.getMessage() );
+     }
+        
+     int registros = 0;
+     int[] codigos = new int[0];
+     
+     try{
+        PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT count(*) as total FROM taller3.pelicula WHERE id_categoria = "+idcategoria+";");
+        ResultSet res = pstm.executeQuery();
+        res.next();
+        registros = res.getInt("total");
+        codigos = new int[registros];
+        res.close();
+     }catch(SQLException e){
+        System.err.println( e.getMessage() );
+     }
+     int[] data = new int[registros];
+     try{
+        PreparedStatement pstm = conectara.conectar().prepareStatement("SELECT * FROM taller3.pelicula WHERE id_categoria = "+idcategoria+";");
+        ResultSet res = pstm.executeQuery();
+        int i=0;
+        while(res.next()){
+               data[i]= res.getInt("codigo" );
+           i++;
+        }
+        res.close();
+        //tablemodel.setDataVector(data, columNames );
+        
+        int e = 0;
+        while (e<registros){
+            codigos[e]= data[e];
+            e++;
+        }
+        }catch(SQLException e){
+           System.err.println( e.getMessage() );
+       }
+       return codigos;
+        
+    }
+    
+    public boolean cambiarcategoria(int codigopelicula,String descripcion){
+        int idcategoria = 0;
+        boolean resultado = false;
+        
+         try{
+            PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT id FROM taller3.categoria WHERE descripcion = "+descripcion+";"); 
+            ResultSet res = pstm.executeQuery();
+            if(res.next()){
+                idcategoria = res.getInt("id");
+            }
+            res.close();
+         }catch(SQLException e){
+            System.err.println( e.getMessage() );
+         }
+        
+        //envolver en if idcategoria
+       if(idcategoria !=0){
+           String q= "UPDATE taller3.pelicula SET id_categoria='"+idcategoria+"' WHERE codigo='"+codigopelicula+"';";
+             try {
+                 PreparedStatement pstm = conectara.conectar().prepareStatement(q);
+                 if(pstm.executeUpdate()==1){
+                     resultado = true;
+                 }
+
+              }catch(SQLException e){
+                 System.err.println( e.getMessage() );
+             }
+       }
+        
+        return resultado;
+        
+    }
+    
 }
