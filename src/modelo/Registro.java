@@ -352,7 +352,7 @@ public class Registro {
     public int[] buscarpeliculacategoria(String descripcion){
         int idcategoria =0;
      try{
-        PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT id FROM taller3.categoria WHERE descripcion = "+descripcion+";"); 
+        PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT id FROM taller3.categoria WHERE descripcion = '"+descripcion+"';"); 
         ResultSet res = pstm.executeQuery();
         res.next();
         idcategoria = res.getInt("id");
@@ -403,7 +403,7 @@ public class Registro {
         boolean resultado = false;
         
          try{
-            PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT id FROM taller3.categoria WHERE descripcion = "+descripcion+";"); 
+            PreparedStatement pstm = conectara.conectar().prepareStatement( "SELECT id FROM taller3.categoria WHERE descripcion = '"+descripcion+"';"); 
             ResultSet res = pstm.executeQuery();
             if(res.next()){
                 idcategoria = res.getInt("id");
